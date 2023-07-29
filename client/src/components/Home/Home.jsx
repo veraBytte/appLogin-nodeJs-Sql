@@ -1,6 +1,11 @@
+import './Home.css'
+
 const Home  = () => {
     return (
-        <div>Hola estas logeado en la home</div>
+        <div>
+            <h1>Home</h1>
+            <p>Bienvenido</p>
+        </div>
     );
 }
 

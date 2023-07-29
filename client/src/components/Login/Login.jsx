@@ -1,6 +1,11 @@
 import './Login.css'
 import { useState } from 'react';
 import Home from '../Home/Home';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const noti = withReactContent(Swal)
+
 
 const Login = () => {
 
@@ -8,6 +13,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loginSuccesful, setLoginSuccesful] = useState(false);
 
+    // Esta funcion se ejecuta cuando se hace click en el boton de login y realiza la consulta a la API para saber si el usuario y contraseña son correctos
     const handleSubmit = (e)  => {
         e.preventDefault();
         // console.log({password: password, username: username});
@@ -16,7 +22,6 @@ const Login = () => {
             username: username,
             password: password
         };
-
         fetch("http://localhost:3001/login", {
             method: "POST",
             headers: {
@@ -35,8 +40,20 @@ const Login = () => {
                 console.log(result.token);
                 localStorage.setItem("token", result.token);
                 setLoginSuccesful(true);
+
+                noti.fire({    
+                    title: <strong>Bienvenido!</strong>,
+                    html: <i>${username}</i>,
+                    icon: 'success'
+                })
+
             } else {
                 console.error("Token not found in the response:", result);
+                noti.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Usuario o Contraseña incorrectos',
+                  })
             }
         })
         .catch(err => {
@@ -44,9 +61,8 @@ const Login = () => {
         });
     }
 
-
+    // Esta funcion se ejecuta cuando se hace click en el boton de logout y borra el token del localStorage
     return (
-
         <>{loginSuccesful ? <Home />: 
             <div className="container-form">
                 <form action="">
@@ -68,8 +84,6 @@ const Login = () => {
                 </form>
             </div>
         }</>
-
-        
     );
 }
 
